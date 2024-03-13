@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 
 @Entity
 public class User {
@@ -17,6 +18,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Pocket> pocketList = new ArrayList<Pocket>();
 
+    protected User() {}
+
+    @Builder
+    public User(Long userId, List<Pocket> pocketList) {
+        this.userId = userId;
+        this.pocketList = pocketList;
+    }
 
     public Long getUserId() {
         return userId;
