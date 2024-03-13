@@ -19,9 +19,26 @@ public class PocketService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void serializeTransaction() {
-
+    public void addPointWithSerializeTransaction(Long pocketId, Long point) {
+        Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
+        pocket.addPoint(point);
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    public void addPointWithRepeatableReadTransaction(Long pocketId, Long point) {
+        Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
+        pocket.addPoint(point);
+    }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void addPointWithReadCommittedTransaction(Long pocketId, Long point) {
+        Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
+        pocket.addPoint(point);
+    }
+
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    public void addPointWithReadUncommittedTransaction(Long pocketId, Long point) {
+        Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
+        pocket.addPoint(point);
+    }
 }
