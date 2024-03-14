@@ -6,10 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
+import lombok.Builder;
 
 @Entity
-@Getter
 public class Pocket {
 
     @Id
@@ -21,5 +20,31 @@ public class Pocket {
     private User user;
 
     private Long point;
+
+    public Long addPoint(Long inputPoint) {
+        this.point = this.point + inputPoint;
+        return this.point;
+    }
+
+    protected Pocket() {}
+
+    @Builder
+    public Pocket(Long pocketId, User user, Long point) {
+        this.pocketId = pocketId;
+        this.user = user;
+        this.point = point;
+    }
+
+    public Long getPocketId() {
+        return pocketId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Long getPoint() {
+        return point;
+    }
 }
 
