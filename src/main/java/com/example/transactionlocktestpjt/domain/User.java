@@ -16,14 +16,14 @@ public class User {
     private Long userId;
 
     @OneToMany(mappedBy = "user")
-    private List<Pocket> pocketList = new ArrayList<Pocket>();
+    private List<Pocket> pocketList;
 
     protected User() {}
 
     @Builder
-    public User(Long userId, List<Pocket> pocketList) {
+    public User(Long userId) {
         this.userId = userId;
-        this.pocketList = pocketList;
+        this.pocketList = new ArrayList<>();
     }
 
     public Long getUserId() {
