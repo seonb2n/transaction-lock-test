@@ -5,6 +5,7 @@ import com.example.transactionlocktestpjt.domain.User;
 import com.example.transactionlocktestpjt.repository.PocketRepository;
 import com.example.transactionlocktestpjt.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,6 +18,9 @@ class PocketServiceTest {
     @Autowired
     private PocketRepository pocketRepository;
 
+    @Autowired
+    private PocketService pocketService;
+
     private User user;
     private Pocket pocket;
 
@@ -27,6 +31,11 @@ class PocketServiceTest {
         user.getPocketList().add(pocket);
         userRepository.save(user);
         pocketRepository.save(pocket);
+    }
+
+    @Test
+    void testFindTotalPocketPointByUserId() {
+        var point = pocketService.findTotalPocketPointByUserId(1L);
     }
 
 }
