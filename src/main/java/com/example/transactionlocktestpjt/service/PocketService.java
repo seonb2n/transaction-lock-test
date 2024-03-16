@@ -20,6 +20,12 @@ public class PocketService {
         return pocketRepository.findByUserId(userId).stream().mapToLong(Pocket::getPoint).sum();
     }
 
+    public void addPointWithoutTransaction(Long pocketId, Long point) {
+        Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
+        pocket.addPoint(point);
+        pocketRepository.save(pocket);
+    }
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void addPointWithSerializeTransaction(Long pocketId, Long point) {
         Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
