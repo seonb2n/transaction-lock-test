@@ -87,6 +87,7 @@ class PocketServiceTest {
             });
         }
         latch.await();
+        executorService.shutdown();
         var point = pocketService.findTotalPocketPointByUserId(1L);
         // mysql 의 default transaction isolation level 은 repeatable read
         assertEquals(200, point);
@@ -107,6 +108,26 @@ class PocketServiceTest {
                 latch.countDown();
             });
         }
+        executorService.shutdown();
+        latch.await();
+    }
+
+    @DisplayName("비관락을 활용하는 경우, 순차적으로 연산이 수행된다.")
+    @Test
+    public void testAddPointWithPessimisticLock() throws Exception {
+        final int threadNumber = 10;
+        final long inputPoint = 100L;
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        CountDownLatch latch = new CountDownLatch(threadNumber);
+        for (int i = 0; i < threadNumber; i++) {
+            executorService.execute(() -> {
+                pocketService.addPointWithPessimisticRock(1L, inputPoint);
+                var point = pocketService.findTotalPocketPointByUserId(1L);
+                logger.info("point: {}", point);
+                latch.countDown();
+            });
+        }
+        executorService.shutdown();
         latch.await();
     }
 }
