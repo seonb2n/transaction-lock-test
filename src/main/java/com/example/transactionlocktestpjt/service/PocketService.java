@@ -49,4 +49,16 @@ public class PocketService {
         Pocket pocket = pocketRepository.findById(pocketId).orElseThrow();
         pocket.addPoint(point);
     }
+
+    /**
+     * 비관락을 사용해서 포인트를 업데이트한다.
+     * @param pocketId
+     * @param point
+     * @return
+     */
+    @Transactional
+    public void addPointWithPessimisticRock(Long pocketId, Long point) {
+        Pocket pocket =  pocketRepository.findUserPocketWithPessimisticLock(pocketId).orElseThrow();
+        pocket.addPoint(point);
+    }
 }
