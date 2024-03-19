@@ -102,9 +102,12 @@ class PocketServiceTest {
         CountDownLatch latch = new CountDownLatch(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
             executorService.execute(() -> {
-                pocketService.addPointWithSerializeTransaction(1L, inputPoint);
-                var point = pocketService.findTotalPocketPointByUserId(1L);
-                logger.info("point: {}", point);
+                // CannotAcquireLockException 발생
+                try {
+                    pocketService.addPointWithSerializeTransaction(1L, inputPoint);
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
                 latch.countDown();
             });
         }
@@ -121,7 +124,26 @@ class PocketServiceTest {
         CountDownLatch latch = new CountDownLatch(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
             executorService.execute(() -> {
-                pocketService.addPointWithPessimisticRock(1L, inputPoint);
+                pocketService.addPointWithPessimisticLock(1L, inputPoint);
+                var point = pocketService.findTotalPocketPointByUserId(1L);
+                logger.info("point: {}", point);
+                latch.countDown();
+            });
+        }
+        executorService.shutdown();
+        latch.await();
+    }
+
+    @DisplayName("낙관락을 활용하는 경우, ObjectOptimisticLockingFailureException 이 발생한다.")
+    @Test
+    public void testAddPointWithOptimisticLock() throws Exception {
+        final int threadNumber = 10;
+        final long inputPoint = 100L;
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        CountDownLatch latch = new CountDownLatch(threadNumber);
+        for (int i = 0; i < threadNumber; i++) {
+            executorService.execute(() -> {
+                pocketService.addPointWithOptimisticLock(1L, inputPoint);
                 var point = pocketService.findTotalPocketPointByUserId(1L);
                 logger.info("point: {}", point);
                 latch.countDown();

@@ -57,8 +57,14 @@ public class PocketService {
      * @return
      */
     @Transactional
-    public void addPointWithPessimisticRock(Long pocketId, Long point) {
+    public void addPointWithPessimisticLock(Long pocketId, Long point) {
         Pocket pocket =  pocketRepository.findUserPocketWithPessimisticLock(pocketId).orElseThrow();
+        pocket.addPoint(point);
+    }
+
+    @Transactional
+    public void addPointWithOptimisticLock(Long pocketId, Long point) {
+        Pocket pocket = pocketRepository.findUserPocketWithOptimisticLock(pocketId).orElseThrow();
         pocket.addPoint(point);
     }
 }
