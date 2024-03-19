@@ -62,6 +62,7 @@ public class PocketService {
         pocket.addPoint(point);
     }
 
+    @Transactional
     public void addPointWithOptimisticLock(Long pocketId, Long point) {
         Pocket pocket = pocketRepository.findUserPocketWithOptimisticLock(pocketId).orElseThrow();
         pocket.addPoint(point);

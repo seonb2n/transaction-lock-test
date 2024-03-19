@@ -38,7 +38,7 @@ public class PocketRepositoryImpl implements PocketQueryDslRepository {
         QPocket pocket = QPocket.pocket;
         return Optional.ofNullable(queryFactory.selectFrom(pocket)
             .where(pocket.pocketId.eq(pocketId))
-            .setLockMode(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+            .setLockMode(LockModeType.OPTIMISTIC)
             .fetchFirst()
         );
     }

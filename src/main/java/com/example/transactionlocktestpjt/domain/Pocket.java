@@ -37,6 +37,7 @@ public class Pocket {
         this.pocketId = pocketId;
         this.user = user;
         this.point = point;
+        this.version = 1;
     }
 
     public Long getPocketId() {
