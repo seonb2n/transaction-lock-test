@@ -13,4 +13,6 @@ interface PocketQueryDslRepository{
     List<Pocket> findByUserId(Long userId);
 
     Optional<Pocket> findUserPocketWithPessimisticLock(Long pocketId);
+
+    Optional<Pocket> findUserPocketWithOptimisticLock(Long pocketId);
 }

@@ -32,4 +32,14 @@ public class PocketRepositoryImpl implements PocketQueryDslRepository {
             .setLockMode(LockModeType.PESSIMISTIC_WRITE)
             .fetchFirst());
     }
+
+    @Override
+    public Optional<Pocket> findUserPocketWithOptimisticLock(Long pocketId) {
+        QPocket pocket = QPocket.pocket;
+        return Optional.ofNullable(queryFactory.selectFrom(pocket)
+            .where(pocket.pocketId.eq(pocketId))
+            .setLockMode(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
+            .fetchFirst()
+        );
+    }
 }
